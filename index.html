@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f7a8cf">
+<title>Nishitanvi Tummala | 1st Birthday Invitation</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Georgia', serif;
+  color: #542b50;
+  background: #fff4fa;
+  overflow-x: hidden;
+}
+
+/* --- Enter Screen Overlay --- */
+#enter-screen {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: linear-gradient(135deg, #ffd1ea, #f8eaff, #fff4df);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: pointer;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  text-align: center;
+}
+
+#enter-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.enter-btn {
+  margin-top: 20px;
+  padding: 18px 36px;
+  border-radius: 999px;
+  background: #c12d82;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 10px 30px rgba(193, 45, 130, 0.4);
+  animation: pulse 2s infinite;
+  border: 3px solid #fff;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* --- Main Layout & Card Animation --- */
+.hero {
+  min-height: 100vh;
+  padding: 40px 16px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #fff7fc, #f8eaff 50%, #fff4df);
+}
+
+.floating-container {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+.butterfly {
+  position: absolute;
+  font-size: 32px;
+  opacity: 0.85;
+  animation: floatUp 12s linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(105vh) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-10vh) translateX(60px) rotate(20deg); opacity: 0; }
+}
+
+.card {
+  width: min(980px, 100%);
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid #f0c6df;
+  border-radius: 36px;
+  padding: 35px 28px;
+  box-shadow: 0 22px 70px rgba(120, 62, 111, 0.18);
+  text-align: center;
+  position: relative;
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease;
+}
+
+.card.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.top { font-size: 15px; letter-spacing: 4px; text-transform: uppercase; color: #a25b91; }
+h1 { font-size: clamp(45px, 8vw, 82px); margin: 8px 0 0; color: #c12d82; line-height: 1; }
+.subtitle { font-size: clamp(25px, 5vw, 42px); color: #6c3782; margin: 10px 0 22px; }
+
+/* Photo Frame */
+.photo-wrap {
+  width: min(340px, 75vw);
+  height: min(340px, 75vw);
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  padding: 9px;
+  background: linear-gradient(135deg, #d99b31, #f6d57a, #bd6ea8);
+  box-shadow: 0 12px 40px rgba(130, 75, 120, 0.2);
+  position: relative;
+}
+
+.photo-wrap:after {
+  content: "🦋";
+  position: absolute;
+  right: -8px;
+  top: 8px;
+  font-size: 45px;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  border: 5px solid white;
+}
+
+/* Countdown Styles */
+.countdown-title { font-size: 18px; letter-spacing: 2px; text-transform: uppercase; color: #a25b91; margin-top: 20px; }
+.timer { display: flex; justify-content: center; gap: 12px; margin: 15px auto 25px; }
+.time-box { background: #ffe5f2; border: 1px solid #f2b8d5; padding: 12px 16px; border-radius: 16px; min-width: 70px; }
+.time-num { font-size: 28px; font-weight: bold; color: #c12d82; font-family: Arial, sans-serif; }
+.time-label { font-size: 12px; text-transform: uppercase; color: #7b3565; }
+
+/* Details Grid */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 850px; margin: 25px auto; }
+.box { padding: 20px; border-radius: 22px; background: #fff8fc; border: 1px solid #f0d5e5; }
+.box .emoji { font-size: 30px; }
+.label { font-weight: bold; color: #b52d7d; margin: 7px 0; }
+.venue { grid-column: 1 / -1; }
+
+.map-btn, .music-toggle {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 13px 25px;
+  border-radius: 999px;
+  background: #9a4bb2;
+  color: white;
+  text-decoration: none;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.music-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  background: #c12d82;
+}
+
+.parents { font-size: 23px; color: #7c3e78; margin-top: 28px; }
+
+@media(max-width: 620px) {
+  .card { padding: 22px 14px; }
+  .grid { grid-template-columns: 1fr; }
+  .venue { grid-column: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- Tap to Enter Overlay Screen -->
+<div id="enter-screen" onclick="startExperience()">
+  <div style="font-size: 50px; margin-bottom: 10px;">👑✨</div>
+  <h2 style="color: #880e4f; font-size: 28px;">You are Cordially Invited!</h2>
+  <div class="enter-btn">Tap to Enter 💖</div>
+</div>
+
+<!-- Floating Audio Control -->
+<button class="music-toggle" id="musicBtn" onclick="toggleMusic()">🔊 Music On</button>
+
+<!-- Background Audio configured with your repository audio file -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="Irumudi-Yaalalo-Yaalalo-BGM-Ringtone.mp3.mpeg" type="audio/mpeg">
+</audio>
+
+<section class="hero">
+  <div class="floating-container" id="butterflyContainer"></div>
+
+  <main class="card" id="mainCard">
+    <div class="top">👑 A Magical Celebration 👑</div>
+    <h1>Nishitanvi</h1>
+    <div class="subtitle">Tummala • Turns ONE! 🎂</div>
+
+    <div class="photo-wrap">
+      <!-- Configured with your repository baby photo -->
+      <img class="photo" src="file_000000004344820b95a5bed5d37eeff5.png" alt="Nishitanvi">
+    </div>
+
+    <!-- Countdown Timer -->
+    <div class="countdown-title">Counting down to the big day</div>
+    <div class="timer">
+      <div class="time-box"><div class="time-num" id="days">00</div><div class="time-label">Days</div></div>
+      <div class="time-box"><div class="time-num" id="hours">00</div><div class="time-label">Hours</div></div>
+      <div class="time-box"><div class="time-num" id="minutes">00</div><div class="time-label">Mins</div></div>
+      <div class="time-box"><div class="time-num" id="seconds">00</div><div class="time-label">Secs</div></div>
+    </div>
+
+    <p style="font-size: 19px; line-height: 1.65; max-width: 720px; margin: 24px auto; color: #69465f;">
+      Our little butterfly is turning ONE! Join us for an evening filled with laughter, joy, and wonderful memories as we celebrate this special milestone.
+    </p>
+
+    <div class="grid">
+      <div class="box">
+        <div class="emoji">📅</div>
+        <div class="label">DATE & TIME</div>
+        <div>March 25, 2026</div>
+        <div>6:30 PM Onwards</div>
+      </div>
+      <div class="box">
+        <div class="emoji">🎈</div>
+        <div class="label">THEME</div>
+        <div>Butterflies & Floral Garden</div>
+      </div>
+      <div class="box venue">
+        <div class="emoji">📍</div>
+        <div class="label">VENUE</div>
+        <div>Grand Celebration Hall</div>
+        <div>Annavaram, Andhra Pradesh</div>
+        <a class="map-btn" href="https://maps.google.com" target="_blank">Get Directions 🗺️</a>
+      </div>
+    </div>
+
+    <div class="parents">
+      With Love,<br>
+      <strong>Kishore & Teja Tummala</strong>
+    </div>
+  </main>
+</section>
+
+<script>
+// Start experience on user interaction (allows browser audio playback)
+function startExperience() {
+  document.getElementById('enter-screen').classList.add('hidden');
+  document.getElementById('mainCard').classList.add('visible');
+  
+  const music = document.getElementById('bgMusic');
+  music.play().then(() => {
+    document.getElementById('musicBtn').innerText = "🔊 Music On";
+  }).catch(() => {
+    document.getElementById('musicBtn').innerText = "🔈 Music Off";
+  });
+}
+
+// Music Play/Pause Toggle
+function toggleMusic() {
+  const music = document.getElementById('bgMusic');
+  const btn = document.getElementById('musicBtn');
+  if (music.paused) {
+    music.play();
+    btn.innerText = "🔊 Music On";
+  } else {
+    music.pause();
+    btn.innerText = "🔈 Music Off";
+  }
+}
+
+// Floating Butterflies Generator
+const container = document.getElementById('butterflyContainer');
+const butterflyEmojis = ['🦋', '🌸', '✨', '🌷'];
+
+for (let i = 0; i < 20; i++) {
+  const el = document.createElement('div');
+  el.className = 'butterfly';
+  el.innerText = butterflyEmojis[Math.floor(Math.random() * butterflyEmojis.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.animationDuration = (8 + Math.random() * 8) + 's';
+  el.style.animationDelay = (Math.random() * 5) + 's';
+  el.style.fontSize = (24 + Math.random() * 20) + 'px';
+  container.appendChild(el);
+}
+
+// Countdown Timer Logic
+const eventDate = new Date("March 25, 2026 18:30:00").getTime();
+
+function updateCountdown() {
+  const now = new Date().getTime();
+  const diff = eventDate - now;
+
+  if (diff > 0) {
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('days').innerText = String(days).padStart(2, '0');
+    document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+    document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+    document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+  } else {
+    document.getElementById('days').innerText = '00';
+    document.getElementById('hours').innerText = '00';
+    document.getElementById('minutes').innerText = '00';
+    document.getElementById('seconds').innerText = '00';
+  }
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+</script>
+</body>
+</html>

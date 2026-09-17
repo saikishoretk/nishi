@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -110,10 +110,10 @@ body {
 h1 { font-size: clamp(45px, 8vw, 82px); margin: 8px 0 0; color: #c12d82; line-height: 1; }
 .subtitle { font-size: clamp(25px, 5vw, 42px); color: #6c3782; margin: 10px 0 22px; }
 
-/* Photo Frame */
+/* --- Photo Frame Slider Styles --- */
 .photo-wrap {
-  width: min(340px, 75vw);
-  height: min(340px, 75vw);
+  width: min(420px, 85vw);
+  height: min(420px, 85vw);
   margin: 0 auto 20px;
   border-radius: 50%;
   padding: 9px;
@@ -128,15 +128,78 @@ h1 { font-size: clamp(45px, 8vw, 82px); margin: 8px 0 0; color: #c12d82; line-he
   right: -8px;
   top: 8px;
   font-size: 45px;
+  z-index: 10;
 }
 
-.photo {
+.slider-container {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   border-radius: 50%;
-  display: block;
+  position: relative;
+  overflow: hidden;
   border: 5px solid white;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  object-fit: cover;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+/* Slider Controls */
+.prev-btn, .next-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.75);
+  color: #c12d82;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.prev-btn { left: 15px; }
+.next-btn { right: 15px; }
+
+.slider-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.dot.active {
+  background: #c12d82;
 }
 
 /* Countdown Styles */
@@ -197,7 +260,7 @@ h1 { font-size: clamp(45px, 8vw, 82px); margin: 8px 0 0; color: #c12d82; line-he
 <!-- Floating Audio Control -->
 <button class="music-toggle" id="musicBtn" onclick="toggleMusic()">🔊 Music On</button>
 
-<!-- Background Audio configured with your repository audio file -->
+<!-- Background Audio -->
 <audio id="bgMusic" loop preload="auto">
   <source src="Irumudi-Yaalalo-Yaalalo-BGM-Ringtone.mp3.mpeg" type="audio/mpeg">
 </audio>
@@ -210,9 +273,27 @@ h1 { font-size: clamp(45px, 8vw, 82px); margin: 8px 0 0; color: #c12d82; line-he
     <h1>Nishitanvi</h1>
     <div class="subtitle">Tummala • Turns ONE! 🎂</div>
 
+    <!-- Photo Slider Frame -->
     <div class="photo-wrap">
-      <!-- Configured with your repository baby photo -->
-      <img class="photo" src="file_000000004344820b95a5bed5d37eeff5.png" alt="Nishitanvi">
+      <div class="slider-container">
+        <!-- Photo 1 -->
+        <img class="slide active" src="file_000000004344820b95a5bed5d37eeff5.png" alt="Nishitanvi Photo 1">
+        <!-- Photo 2 (Replace with your second image filename if different) -->
+        <img class="slide" src="kishore.jpeg" alt="Nishitanvi Photo 2">
+		<img class="slide" src="pavi.jpeg" alt="Nishitanvi Photo 3">
+	    <img class="slide" src="teja.jpeg" alt="Nishitanvi Photo 4">
+
+      </div>
+      
+      <button class="prev-btn" onclick="changeSlide(-1)">❮</button>
+      <button class="next-btn" onclick="changeSlide(1)">❯</button>
+      
+      <div class="slider-dots">
+        <span class="dot active" onclick="setSlide(0)"></span>
+        <span class="dot" onclick="setSlide(1)"></span>
+		<span class="dot" onclick="setSlide(2)"></span>
+		<span class="dot" onclick="setSlide(3)"></span>
+      </div>
     </div>
 
     <!-- Countdown Timer -->
@@ -228,7 +309,7 @@ h1 { font-size: clamp(45px, 8vw, 82px); margin: 8px 0 0; color: #c12d82; line-he
       Our little butterfly is turning ONE! Join us for an evening filled with laughter, joy, and wonderful memories as we celebrate this special milestone.
     </p>
 
-    <div class="grid">
+   
       <div class="box">
         <div class="emoji">⏰</div>
         <div class="label">DATE & TIME</div>
@@ -252,7 +333,7 @@ h1 { font-size: clamp(45px, 8vw, 82px); margin: 8px 0 0; color: #c12d82; line-he
 </section>
 
 <script>
-// Start experience on user interaction (allows browser audio playback)
+// Start experience on user interaction
 function startExperience() {
   document.getElementById('enter-screen').classList.add('hidden');
   document.getElementById('mainCard').classList.add('visible');
@@ -276,6 +357,40 @@ function toggleMusic() {
     music.pause();
     btn.innerText = "🔈 Music Off";
   }
+}
+
+// Photo Slider Logic
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+let slideInterval = setInterval(autoSlide, 4000);
+
+function showSlide(index) {
+  slides.forEach((slide, i) => {
+    slide.classList.remove('active');
+    dots[i].classList.remove('active');
+  });
+  slides[index].classList.add('active');
+  dots[index].classList.add('active');
+}
+
+function autoSlide() {
+  currentSlide = (currentSlide + 1) % slides.length;
+  showSlide(currentSlide);
+}
+
+function changeSlide(direction) {
+  clearInterval(slideInterval);
+  currentSlide = (currentSlide + direction + slides.length) % slides.length;
+  showSlide(currentSlide);
+  slideInterval = setInterval(autoSlide, 4000);
+}
+
+function setSlide(index) {
+  clearInterval(slideInterval);
+  currentSlide = index;
+  showSlide(currentSlide);
+  slideInterval = setInterval(autoSlide, 4000);
 }
 
 // Floating Butterflies Generator
